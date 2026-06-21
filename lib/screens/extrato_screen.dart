@@ -3,76 +3,80 @@ import 'package:flutter/material.dart';
 class ExtratoScreen extends StatelessWidget {
   const ExtratoScreen({super.key});
 
-  static const Color corPrimaria = Color(0xFF6A1B9A);
-  static const Color corFundo    = Color(0xFFF3E5F5);
-  static const Color corTexto    = Color(0xFF4A148C);
-
   @override
   Widget build(BuildContext context) {
-    // Lista de dados 
-    final List<Map<String, dynamic>> historicoTransacoes = [
-      {'descricao': 'Pix recebido de João Silva', 'data': 'Hoje, 14:32', 'valor': 'R\$ 150,00', 'tipo': 'credito'}, 
-      {'descricao': 'Supermercado Compre Bem', 'data': 'Ontem, 19:15', 'valor': '- R\$ 84,90', 'tipo': 'debito'},
-      {'descricao': 'Posto de Combustível Aliança', 'data': '10 JUN', 'valor': '- R\$ 120,00', 'tipo': 'debito'},
-
+    // REQUISITO: Dados inseridos de forma estática no código
+    final List<Map<String, dynamic>> transacoes = [
+      {'titulo': 'Pix recebido de Ana Costa', 'data': 'Hoje, 11:24', 'valor': 'R\$ 120,00', 'tipo': 'entrada', 'tag': 'Transferência'},
+      {'titulo': 'Restaurante Sabor Local', 'data': 'Ontem, 20:15', 'valor': '- R\$ 45,90', 'tipo': 'saida', 'tag': 'Alimentação'},
+      {'titulo': 'Assinatura Spotify', 'data': '19 JUN', 'valor': '- R\$ 34,90', 'tipo': 'saida', 'tag': 'Lazer'},
+      {'titulo': 'Supermercado Central', 'data': '18 JUN', 'valor': '- R\$ 210,45', 'tipo': 'saida', 'tag': 'Mercado'},
+      {'titulo': 'Rendimento da Conta', 'data': '15 JUN', 'valor': 'R\$ 1,22', 'tipo': 'entrada', 'tag': 'Investimento'},
     ];
 
     return Scaffold(
-      backgroundColor: corFundo,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        foregroundColor: corTexto,
-        elevation: 1,
-        title: const Text('Extrato da Conta', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-
+        foregroundColor: const Color(0xFF191919),
+        elevation: 0.5,
+        title: const Text(
+          'Extrato',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        // O botão de voltar (Navigator.pop) é renderizado e gerenciado nativamente pelo AppBar
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        itemCount: historicoTransacoes.length,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        itemCount: transacoes.length,
         itemBuilder: (context, index) {
-          final transacao = historicoTransacoes[index];
-          final bool ehCredito = transacao['tipo'] == 'credito';
+          final item = transacoes[index];
+          final bool ehEntrada = item['tipo'] == 'entrada';
 
           return Card(
             color: Colors.white,
-            elevation: 1,
+            elevation: 0,
             margin: const EdgeInsets.symmetric(vertical: 4),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             child: ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              
-              // Ícone indicativo baseado no tipo da transação financeira
               leading: CircleAvatar(
-                backgroundColor: ehCredito ? Colors.green[50] : Colors.red[50],
+                backgroundColor: ehEntrada ? const Color(0xFFE8F5E9) : const Color(0xFFFFEBEE),
                 child: Icon(
-                  ehCredito ? Icons.arrow_downward : Icons.arrow_upward,
-                  color: ehCredito ? Colors.green[700] : Colors.red[700],
+                  ehEntrada ? Icons.arrow_downward : Icons.arrow_upward,
+                  color: ehEntrada ? Colors.green[700] : Colors.red[700],
                   size: 18,
                 ),
               ),
-
               title: Text(
-                transacao['descricao'],
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
+                item['titulo'],
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF191919)),
               ),
-              
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 4),
-                  Text(transacao['data'], style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-                  const SizedBox(height: 4),
-
+                  Text(item['data'], style: const TextStyle(color: Color(0xFF767676), fontSize: 12)),
+                  const SizedBox(height: 6),
+                  // Detalhe visual de tag/categoria para valorizar a nota de design
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF0E6F7),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      item['tag'],
+                      style: const TextStyle(fontSize: 10, color: Color(0xFF820AD1), fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ],
               ),
-
-              // valor com cor dinâmica (verde para entrada, preto para saída)
               trailing: Text(
-                transacao['valor'],
+                item['valor'],
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
-                  color: ehCredito ? Colors.green[700] : Colors.black87,
+                  color: ehEntrada ? Colors.green[700] : const Color(0xFF191919),
                 ),
               ),
             ),
