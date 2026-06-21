@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'extrato_screen.dart';
+import 'package:banco_digital/screens/extrato_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
